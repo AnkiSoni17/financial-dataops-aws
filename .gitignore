@@ -1,0 +1,26 @@
+# Terraform generated files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Local financial datasets
+data/*.csv
+data/*.json
+
+# Secrets
+.env
+*.pem
+*.key
+.aws/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# VS Code
+.vscode/
