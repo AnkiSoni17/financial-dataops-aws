@@ -1,3 +1,5 @@
+
+
 import sys
 import uuid
 from datetime import datetime, timezone
@@ -364,11 +366,18 @@ logger = glue_context.get_logger()
 job = Job(glue_context)
 job.init(args["JOB_NAME"], args)
 
+PIPELINE_VERSION = "1.0.1"
+
 pipeline_run_id = str(uuid.uuid4())
 ingestion_timestamp = datetime.now(timezone.utc)
 
 logger.info(
     f"Starting raw-to-silver run: {pipeline_run_id}"
+
+)
+
+logger.info(
+    f"Starting raw-to-silver pipeline version={PIPELINE_VERSION}"
 )
 
 
