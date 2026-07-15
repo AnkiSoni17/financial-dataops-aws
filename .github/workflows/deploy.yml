@@ -1,0 +1,47 @@
+name: Deploy Glue Artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Package transformation library
+        run: |
+          mkdir -p build
+          zip -r build/financial_transformations.zip src
+
+      - name: Upload Glue script
+        run: |
+          aws s3 cp \
+            glue/raw_to_silver.py \
+            s3://${{ vars.DATA_BUCKET }}/scripts/raw_to_silver.py
+
+      - name: Upload transformation library
+        run: |
+          aws s3 cp \
+            build/financial_transformations.zip \
+            s3://${{ vars.DATA_BUCKET }}/scripts/financial_transformations.zip
+
+      - name: Verify deployment
+        run: |
+          aws s3 ls \
+            s3://${{ vars.DATA_BUCKET }}/scripts/

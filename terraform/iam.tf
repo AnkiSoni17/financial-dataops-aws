@@ -28,7 +28,8 @@ data "aws_iam_policy_document" "glue_permissions" {
 
     actions = [
       "s3:ListBucket",
-      "s3:GetBucketLocation"
+      "s3:GetBucketLocation",
+      "s3:ListBucketMultipartUploads"
     ]
 
     resources = [
@@ -43,18 +44,33 @@ data "aws_iam_policy_document" "glue_permissions" {
     actions = [
       "s3:GetObject",
       "s3:PutObject",
-      "s3:DeleteObject"
+      "s3:DeleteObject",
+      "s3:AbortMultipartUpload"
     ]
 
     resources = [
       "${aws_s3_bucket.data_lake.arn}/raw/*",
+      "${aws_s3_bucket.data_lake.arn}/raw_$folder$",
+
       "${aws_s3_bucket.data_lake.arn}/bronze/*",
+      "${aws_s3_bucket.data_lake.arn}/bronze_$folder$",
+
       "${aws_s3_bucket.data_lake.arn}/silver/*",
+      "${aws_s3_bucket.data_lake.arn}/silver_$folder$",
+
       "${aws_s3_bucket.data_lake.arn}/gold/*",
+      "${aws_s3_bucket.data_lake.arn}/gold_$folder$",
+
       "${aws_s3_bucket.data_lake.arn}/quarantine/*",
+      "${aws_s3_bucket.data_lake.arn}/quarantine_$folder$",
+
       "${aws_s3_bucket.data_lake.arn}/scripts/*",
+
       "${aws_s3_bucket.data_lake.arn}/athena-results/*",
-      "${aws_s3_bucket.data_lake.arn}/temp/*"
+      "${aws_s3_bucket.data_lake.arn}/athena-results_$folder$",
+
+      "${aws_s3_bucket.data_lake.arn}/temp/*",
+      "${aws_s3_bucket.data_lake.arn}/temp_$folder$"
     ]
   }
 
@@ -65,16 +81,23 @@ data "aws_iam_policy_document" "glue_permissions" {
     actions = [
       "glue:GetDatabase",
       "glue:GetDatabases",
+      "glue:CreateDatabase",
+      "glue:UpdateDatabase",
+
       "glue:GetTable",
       "glue:GetTables",
       "glue:CreateTable",
       "glue:UpdateTable",
       "glue:DeleteTable",
+
+      "glue:GetPartition",
+      "glue:GetPartitions",
+      "glue:CreatePartition",
+      "glue:UpdatePartition",
+      "glue:DeletePartition",
       "glue:BatchCreatePartition",
       "glue:BatchUpdatePartition",
-      "glue:BatchDeletePartition",
-      "glue:GetPartition",
-      "glue:GetPartitions"
+      "glue:BatchDeletePartition"
     ]
 
     resources = ["*"]

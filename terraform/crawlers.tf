@@ -46,6 +46,13 @@ resource "aws_glue_crawler" "silver" {
     path = "s3://${aws_s3_bucket.data_lake.bucket}/silver/transactions/"
   }
 
+  s3_target {
+    path = "s3://${aws_s3_bucket.data_lake.bucket}/silver/mcc/"
+  }
+  s3_target {
+    path = "s3://${aws_s3_bucket.data_lake.bucket}/silver/fraud-labels/"
+  }
+
   table_prefix = "silver_"
 
   schema_change_policy {
