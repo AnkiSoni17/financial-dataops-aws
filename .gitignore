@@ -3,8 +3,10 @@
 *.tfstate
 *.tfstate.*
 *.tfplan
+terraform.tfvars
 crash.log
 crash.*.log
+.terraform.lock.hcl
 
 # Local financial datasets
 data/*.csv
@@ -21,6 +23,10 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.pytest_cache/
+.ruff_cache/
+
 
 # VS Code
 .vscode/
+.idea/
